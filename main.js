@@ -177,7 +177,9 @@ function applyFiltersAndSearch() {
     性別: getChecked("filter-性別")
   };
   const search = document.getElementById("search-text")?.value.trim();
-  return allCards.filter(card => {
+  const sortOrder = document.querySelector('input[name="sort-order"]:checked')?.value;
+
+  let result = allCards.filter(card => {
     for (let key in filters) {
       if (filters[key].length && !filters[key].includes(String(card[key]))) return false;
     }
@@ -194,7 +196,23 @@ function applyFiltersAndSearch() {
     }
     return true;
   });
+
+  // 加入排序
+  if (sortOrder === "atk-asc") {
+    result.sort((a, b) => (parseInt(a.攻撃力) || 0) - (parseInt(b.攻撃力) || 0));
+  } else if (sortOrder === "atk-desc") {
+    result.sort((a, b) => (parseInt(b.攻撃力) || 0) - (parseInt(a.攻撃力) || 0));
+  } else if (sortOrder === "def-asc") {
+    result.sort((a, b) => (parseInt(a.守備力) || 0) - (parseInt(b.守備力) || 0));
+  } else if (sortOrder === "def-desc") {
+    result.sort((a, b) => (parseInt(b.守備力) || 0) - (parseInt(a.守備力) || 0));
+  } else {
+    result.sort((a, b) => Number(a.id) - Number(b.id)); // 預設依照 ID 排序
+  }
+
+  return result;
 }
+
 
 function renderFilterPanel() {
   const filters = {
@@ -238,6 +256,9 @@ function toggleFilter() {
 }
 function toggleSearch() {
   document.getElementById("search-panel").classList.toggle("collapsed");
+}
+function toggleSort() {
+  document.getElementById("sort-panel").classList.toggle("collapsed");
 }
 function resetFilters() {
   document.querySelectorAll("#filters input[type='checkbox']").forEach(cb => cb.checked = false);
@@ -383,11 +404,18 @@ function importDeck() {
 document.addEventListener("mousedown", (event) => {
   const filterPanel = document.getElementById("filter-panel");
   const searchPanel = document.getElementById("search-panel");
+  const sortPanel = document.getElementById("sort-panel");
 
   // 忽略 filter panel 本身與觸發按鈕
   const clickedFilter = filterPanel.contains(event.target) || event.target.id === "filter-toggle";
   const clickedSearch = searchPanel.contains(event.target) || event.target.id === "search-toggle";
+  const clickedSort = sortPanel.contains(event.target) || event.target.id === "sort-toggle";
 
   if (!clickedFilter) filterPanel.classList.add("collapsed");
   if (!clickedSearch) searchPanel.classList.add("collapsed");
+  if (!clickedSort) sortPanel.classList.add("collapsed");
+});
+
+document.querySelectorAll('input[name="sort-order"]').forEach(radio => {
+  radio.addEventListener('change', renderCardList);
 });

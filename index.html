@@ -9,11 +9,14 @@
 
 <body ondrop="handleDrop(event)" ondragover="allowDrop(event)">
   <div id="panel-top">
-    <div id="filter-toggle" onclick="toggleFilter()">🔍 フィルター</div>
-    <div id="search-toggle" onclick="toggleSearch()">🔍 サーチ</div>
-    <div id="reset-toggle" onclick="resetFilters(); resetSearch()">リセット</div>
-    <div id="export" onclick="exportDeck()">輸出</div>
-    <div id="import" onclick="importDeck()">輸入</div>
+    <div id="top-bar">
+      <div id="export" onclick="exportDeck()">輸出</div>
+      <div id="import" onclick="importDeck()">輸入</div>
+      <div id="filter-toggle" onclick="toggleFilter()">🔍 フィルター</div>
+      <div id="search-toggle" onclick="toggleSearch()">🔍 サーチ</div>
+      <div id="sort-toggle" onclick="toggleSort()">⇅ ソート</div>
+      <div id="reset-toggle" onclick="resetFilters(); resetSearch()">⭮ リセット</div>
+    </div>
 
     <div id="filter-panel" class="collapsed">
       <h2>フィルター</h2>
@@ -28,6 +31,19 @@
       <input type="text" id="search-text" placeholder="ＩＤ・名前・略称・説明を検索">
       <button onclick="renderCardList()">確定</button>
       <button onclick="resetSearch()">リセット</button>
+    </div>
+
+    <div id="sort-panel" class="collapsed">
+      <h2>排序</h2>
+      <fieldset>
+        <label class="sort-label"><input type="radio" name="sort-order" value="" checked> 預設</label>
+        <br>atk<br>
+        <label class="sort-label"><input type="radio" name="sort-order" value="atk-desc"> 降序</label>
+        <label class="sort-label"><input type="radio" name="sort-order" value="atk-asc"> 升序</label>
+        <br>def<br>
+        <label class="sort-label"><input type="radio" name="sort-order" value="def-desc"> 降序</label>
+        <label class="sort-label"><input type="radio" name="sort-order" value="def-asc"> 升序</label>
+      </fieldset>
     </div>
   </div>
 
